@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ETModel
+namespace ET
 {
-	[ObjectSystem]
+	
 	public class NumericWatcherComponentAwakeSystem : AwakeSystem<NumericWatcherComponent>
 	{
 		public override void Awake(NumericWatcherComponent self)
 		{
+			NumericWatcherComponent.Instance = self;
 			self.Awake();
 		}
 	}
 
-	[ObjectSystem]
+	
 	public class NumericWatcherComponentLoadSystem : LoadSystem<NumericWatcherComponent>
 	{
 		public override void Load(NumericWatcherComponent self)
@@ -26,6 +27,8 @@ namespace ETModel
 	/// </summary>
 	public class NumericWatcherComponent : Entity
 	{
+		public static NumericWatcherComponent Instance { get; set; }
+		
 		private Dictionary<NumericType, List<INumericWatcher>> allWatchers;
 
 		public void Awake()
@@ -55,7 +58,7 @@ namespace ETModel
 			}
 		}
 
-		public void Run(NumericType numericType, long id, int value)
+		public void Run(NumericType numericType, long id, long value)
 		{
 			List<INumericWatcher> list;
 			if (!this.allWatchers.TryGetValue(numericType, out list))
